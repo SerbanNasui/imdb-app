@@ -13,6 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        \App\Models\Movie::factory(5)->create();
+        $artists = \App\Models\Artist::factory(10)->create();
+
+        \App\Models\Movie::all()->each(function ($movie) use ($artists){
+            $movie->artists()->saveMany($artists);
+         });
     }
 }
