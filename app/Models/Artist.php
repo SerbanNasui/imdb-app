@@ -20,5 +20,11 @@ class Artist extends Model
     public function movies(){
         return $this->belongsToMany(Movie::class, 'movie_artist');
     }
+
+    public function scopeFilterByTitle($query, $param){
+        $query->where('title', $param);
+       
+        return $query;
+    }
         
 }
