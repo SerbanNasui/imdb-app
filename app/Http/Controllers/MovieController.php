@@ -10,12 +10,22 @@ class MovieController extends Controller
 {
     // get movies
     public function index(){
- 
-        $movies = Movie::filterByStatusAndRating()->with('artists', function($query){
-            $query->orderBy('title','asc')->get();
-        })->get();
- 
-        return response()->json($movies);
+        
+        // v1
+        // $movies = Movie::filterByStatusAndRating()->with('artists', function($query){
+        //     $query->orderBy('title','asc')->get();
+        // })->get();
+
+        // return response()->json($movies);
+
+        $movies = Movie::filterByStatusAndRating()->get();
+        foreach ($movies as $movie) {
+            $getCollection[] = [
+                'movie' => $movie,
+                'artists' => collect($movie->artists()->get())->groupBy('title')->toArray()
+            ];
+        }
+        return response()->json($getCollection);
     }
  
     //create a movie
